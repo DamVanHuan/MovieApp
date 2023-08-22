@@ -1,8 +1,13 @@
+using MovieApp.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configure services.
+builder.Services.AddCustomDbContext(builder.Configuration);
 
+// Add services to the container.
 builder.Services.AddControllers();
+
 
 var app = builder.Build();
 
