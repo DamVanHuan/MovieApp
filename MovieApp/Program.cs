@@ -1,7 +1,12 @@
+﻿using Microsoft.AspNetCore.Diagnostics;
 using MovieApp.Applications.Mappers;
+using MovieApp.DTOs.Commons;
+using MovieApp.DTOs.Exceptions;
 using MovieApp.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Net;
+using System.Net.Mime;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,5 +41,30 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseExceptionHandler(new ExceptionHandlerOptions
+{
+    AllowStatusCode404Response = true,
+    ExceptionHandler = async context =>
+    {
+        context.Response.ContentType = MediaTypeNames.Application.Json;
+
+        var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+        var exception = exceptionHandlerPathFeature?.Error;
+        if (exception is ExceptionBase ex)
+        {
+            context.Response.StatusCode = ex.StatusCode;
+            await context.Response.WriteAsync(ex.ToString()).ConfigureAwait(false);
+        }
+        else
+        {
+            context.Response.StatusCode = Convert.ToInt32(HttpStatusCode.InternalServerError);
+            var error = new ResponseBase("internal_server_error", "Có lỗi xảy ra, vui lòng thử lại");
+            
+            var resp = JsonConvert.SerializeObject(new { code = error.Code, message = error.Message });
+            await context.Response.WriteAsync(resp).ConfigureAwait(false);
+        }
+    }
+});
 
 app.Run();
