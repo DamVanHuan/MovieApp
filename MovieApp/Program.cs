@@ -36,12 +36,6 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
 app.UseExceptionHandler(new ExceptionHandlerOptions
 {
     AllowStatusCode404Response = true,
@@ -60,11 +54,18 @@ app.UseExceptionHandler(new ExceptionHandlerOptions
         {
             context.Response.StatusCode = Convert.ToInt32(HttpStatusCode.InternalServerError);
             var error = new ResponseBase("internal_server_error", "Có lỗi xảy ra, vui lòng thử lại");
-            
+
             var resp = JsonConvert.SerializeObject(new { code = error.Code, message = error.Message });
             await context.Response.WriteAsync(resp).ConfigureAwait(false);
         }
     }
 });
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
