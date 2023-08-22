@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieApp.Applications.Commands.Users;
 
@@ -17,6 +16,13 @@ namespace MovieApp.Controllers
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUserAsync([FromBody] RegisterUserCommand model)
+        {
+            var resp = await _mediator.Send(model);
+            return Ok(resp);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync([FromBody] LoginCommand model)
         {
             var resp = await _mediator.Send(model);
             return Ok(resp);

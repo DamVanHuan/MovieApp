@@ -35,7 +35,7 @@ namespace MovieApp.Applications.Commands.Users
             var userDto = _mapper.Map<UserDTO>(user);
             return new RegisterUserResponseDTO
             {
-                Token = LoginHelper.GenerateToken(userDto, _jwt),
+                Token = LoginHelper.GenerateToken(user, _jwt),
                 User = userDto
             };
         }

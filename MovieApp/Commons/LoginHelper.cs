@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using MovieApp.Data.Entities;
 using MovieApp.DTOs.Commons;
-using MovieApp.DTOs.Users;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -26,7 +26,7 @@ namespace MovieApp.Commons
             return BytesToHex(res);
         }
 
-        public static string GenerateToken(UserDTO user, JWT jwt)
+        public static string GenerateToken(User user, JWT jwt)
         {
             var authClaims = new List<Claim>
             {
