@@ -26,7 +26,7 @@ namespace MovieApp.Data
                     Id = 1,
                     Username = "user1",
                     Email = "user1@gmail.com",
-                    Password = PasswordHelper.Encrypt("123456")
+                    Password = LoginHelper.EncryptPassword("123456", "user1")
                 });
 
             modelBuilder.Entity<Movie>()
