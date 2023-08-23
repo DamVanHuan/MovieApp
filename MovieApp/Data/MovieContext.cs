@@ -9,6 +9,7 @@ namespace MovieApp.Data
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Movie> Movies { get; set; }
+        public DbSet<MovieReaction> MovieReactions { get; set; }
 
         public MovieContext(DbContextOptions<MovieContext> options) : base(options)
         {
@@ -31,31 +32,29 @@ namespace MovieApp.Data
                     Password = LoginHelper.EncryptPassword("123456", uuid.ToString())
                 });
 
-            modelBuilder.Entity<Movie>()
-                .HasData(
-                new Movie
+
+            List<string> images = new List<string>
+            {
+                "https://images.freeimages.com/images/previews/5eb/movie-clapboard-1184339.jpg",
+                "https://images.freeimages.com/images/previews/5eb/movie-clapboard-1184339.jpg",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC1pJ0eoHXdlJEVeVY0MlJ2kUOYrLHGvpY7yIHl2E4&s",
+                "https://www.shutterstock.com/shutterstock/photos/586719869/display_1500/stock-vector-online-cinema-art-movie-watching-with-popcorn-and-film-strip-cinematograph-concept-vintage-retro-586719869.jpg"
+            };
+            List<Movie> movies = new List<Movie>();
+            for (int i = 1; i <= 100; i++)
+            {
+                movies.Add(new Movie
                 {
-                    Id = 1,
-                    Title = "Movie 1 title",
-                    Image = "https://images.freeimages.com/images/previews/5eb/movie-clapboard-1184339.jpg"
-                }, 
-                new Movie
-                {
-                    Id = 2,
-                    Title = "Movie 2 title",
-                    Image = "https://st3.depositphotos.com/1064045/15061/i/450/depositphotos_150614902-stock-photo-unusual-cinema-concept-3d-illustration.jpg"
-                },
-                new Movie
-                {
-                 Id = 3,
-                    Title = "Movie 3 title",
-                    Image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC1pJ0eoHXdlJEVeVY0MlJ2kUOYrLHGvpY7yIHl2E4&s"
-                },
-                new Movie{
-                    Id = 4,
-                    Title = "Movie 4 title",
-                    Image = "https://www.shutterstock.com/shutterstock/photos/586719869/display_1500/stock-vector-online-cinema-art-movie-watching-with-popcorn-and-film-strip-cinematograph-concept-vintage-retro-586719869.jpg"
+                    Id = i,
+                    Title = $"Movie {i} title",
+                    Image = images[(i - 1) % 4],
+                    Like = 0,
+                    Dislike = 0
                 });
+            }
+
+            modelBuilder.Entity<Movie>()
+                .HasData(movies);
         }
     }
 }

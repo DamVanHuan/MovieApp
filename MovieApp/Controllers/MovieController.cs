@@ -7,6 +7,7 @@ using System.Security.Claims;
 
 namespace MovieApp.Controllers
 {
+    [Authorize]
     [Route("movies")]
     public class MovieController : ControllerBase
     {
@@ -26,7 +27,6 @@ namespace MovieApp.Controllers
             return Ok(resp);
         }
 
-        [Authorize]
         [HttpPost("{id:int}/like")]
         public async Task<IActionResult> LikeMovieAsync([FromRoute] int id)
         {
@@ -35,11 +35,18 @@ namespace MovieApp.Controllers
             return Ok(resp);
         }
 
-        [Authorize]
         [HttpPost("{id:int}/dislike")]
         public async Task<IActionResult> DislikeMovieAsync([FromRoute] int id)
         {
             var model = new DislikeMovieCommand(id, _currentUserId);
+            var resp = await _mediator.Send(model);
+            return Ok(resp);
+        }
+
+        [HttpGet("reactions")]
+        public async Task<IActionResult> GetReactionsAsync()
+        {
+            var model = new GetReactionsQuery(_currentUserId);
             var resp = await _mediator.Send(model);
             return Ok(resp);
         }
