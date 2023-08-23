@@ -12,6 +12,8 @@ namespace MovieApp.Controllers
     {
         private readonly IMediator _mediator;
 
+        private int _currentUserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "0");
+
         public MovieController(IMediator mediator)
         {
             _mediator = mediator;
@@ -28,8 +30,16 @@ namespace MovieApp.Controllers
         [HttpPost("{id:int}/like")]
         public async Task<IActionResult> LikeMovieAsync([FromRoute] int id)
         {
-            var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "0");
-            var model = new LikeMovieCommand(id, currentUserId);
+            var model = new LikeMovieCommand(id, _currentUserId);
+            var resp = await _mediator.Send(model);
+            return Ok(resp);
+        }
+
+        [Authorize]
+        [HttpPost("{id:int}/dislike")]
+        public async Task<IActionResult> DislikeMovieAsync([FromRoute] int id)
+        {
+            var model = new DislikeMovieCommand(id, _currentUserId);
             var resp = await _mediator.Send(model);
             return Ok(resp);
         }

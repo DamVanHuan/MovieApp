@@ -14,7 +14,7 @@ namespace MovieApp.Data.EntityConfigurations
 
             builder.Property(p => p.Liked);
 
-            builder.Property(p => p.DisLiked);
+            builder.Property(p => p.Disliked);
         }
     }
 }
