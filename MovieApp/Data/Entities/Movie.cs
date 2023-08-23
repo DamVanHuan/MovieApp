@@ -6,7 +6,8 @@
         public string Title { get; set; } = null!;
         public string Image { get; set; } = null!;
         public int Like { get; set; }
+        public int Dislike { get; set; }
 
-        public ICollection<MovieLike> MovieLikes { get; set; } = null!;
+        public ICollection<MovieReaction> MovieReactions { get; set; } = null!;
     }
 }

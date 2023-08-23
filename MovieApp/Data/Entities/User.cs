@@ -7,6 +7,6 @@
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
 
-        public ICollection<MovieLike> MovieLikes { get; set; } = null!;
+        public ICollection<MovieReaction> MovieReactions { get; set; } = null!;
     }
 }

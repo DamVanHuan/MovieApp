@@ -1,9 +1,12 @@
 ﻿namespace MovieApp.Data.Entities
 {
-    public class MovieLike
+    public class MovieReaction
     {
         public int UserId { get; set; }
         public int MovieId { get; set; }
+
+        public bool Liked { get; set; }
+        public bool DisLiked { get; set; }
 
         public User User { get; set; } = null!;
         public Movie Movie { get; set; } = null!;
