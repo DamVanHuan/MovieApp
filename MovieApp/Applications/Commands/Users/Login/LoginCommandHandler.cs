@@ -25,25 +25,24 @@ namespace MovieApp.Applications.Commands.Users
 
         public async Task<RegisterUserResponseDTO> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            User user = null;
-            if (!string.IsNullOrEmpty(request.UserName))
-            {
-               user = await _movieContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Username == request.UserName);
-            }
-            else if (!string.IsNullOrEmpty(request.Email))
-            {
-                user = await _movieContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == request.Email);
-            }
+            User user = await _movieContext
+                .Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Username == request.Username || u.Email == request.Username);
 
-            var encryptedPassword = LoginHelper.EncryptPassword(request.Password, request.UserName ?? request.Email);
-            if (user != null && user.Password == encryptedPassword)
+            if (user != null)
             {
-                var token = LoginHelper.GenerateToken(user, _jwt);
-                return new RegisterUserResponseDTO
+                var encryptedPassword = LoginHelper.EncryptPassword(request.Password, user.Uid.ToString());
+                if (user.Password == encryptedPassword)
                 {
-                    User = _mapper.Map<UserDTO>(user),
-                    Token = token
-                };
+                    var token = LoginHelper.GenerateToken(user, _jwt);
+                    return new RegisterUserResponseDTO
+                    {
+                        User = _mapper.Map<UserDTO>(user),
+                        Token = token
+                    };
+                }
+
             }
 
             throw new BadRequestException("LoginFailed", "Username/Email or password incorrect");

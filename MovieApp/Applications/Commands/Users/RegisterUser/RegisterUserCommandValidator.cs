@@ -3,9 +3,9 @@ using MovieApp.Extensions;
 
 namespace MovieApp.Applications.Commands.Users
 {
-    public class LoginCommandValidator : AbstractValidator<LoginCommand>
+    public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
     {
-        public LoginCommandValidator()
+        public RegisterUserCommandValidator()
         {
             RuleFor(x => x.Username)
                 .NotEmpty()
@@ -17,7 +17,6 @@ namespace MovieApp.Applications.Commands.Users
                 .When(x => x.Username.IsEmail())
                 .WithErrorCode("InvalidEmail")
                 .WithMessage("Invalid email");
-
 
             RuleFor(x => x.Password)
                 .NotEmpty()

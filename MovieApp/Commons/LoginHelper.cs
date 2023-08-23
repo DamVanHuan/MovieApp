@@ -19,10 +19,10 @@ namespace MovieApp.Commons
             return res.ToString();
         }
 
-        public static string EncryptPassword(string password, string username)
+        public static string EncryptPassword(string password, string uid)
         {
             using var md5 = System.Security.Cryptography.MD5.Create();
-            byte[] res = md5.ComputeHash(Encoding.UTF8.GetBytes(password + username));
+            byte[] res = md5.ComputeHash(Encoding.UTF8.GetBytes(password + uid));
             return BytesToHex(res);
         }
 

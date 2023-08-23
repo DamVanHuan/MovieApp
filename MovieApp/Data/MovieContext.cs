@@ -20,13 +20,15 @@ namespace MovieApp.Data
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserEntityTypeConfiguration).Assembly);
 
+            var uuid = Guid.NewGuid();
             modelBuilder.Entity<User>()
                 .HasData(new User
                 {
                     Id = 1,
                     Username = "user1",
                     Email = "user1@gmail.com",
-                    Password = LoginHelper.EncryptPassword("123456", "user1")
+                    Uid = uuid,
+                    Password = LoginHelper.EncryptPassword("123456", uuid.ToString())
                 });
 
             modelBuilder.Entity<Movie>()

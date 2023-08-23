@@ -26,6 +26,8 @@ namespace MovieApp.Data.EntityConfigurations
             builder.Property(p => p.Password)
                 .IsRequired()
                 .HasMaxLength(50);
+
+            builder.Property(p => p.Uid);
         }
     }
 }
