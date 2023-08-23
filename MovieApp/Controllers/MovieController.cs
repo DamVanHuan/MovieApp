@@ -50,5 +50,13 @@ namespace MovieApp.Controllers
             var resp = await _mediator.Send(model);
             return Ok(resp);
         }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetMovieAsync([FromRoute] int id)
+        {
+            var model = new GetMovieByIdQuery(id);
+            var resp = await _mediator.Send(model);
+            return Ok(resp);
+        }
     }
 }
