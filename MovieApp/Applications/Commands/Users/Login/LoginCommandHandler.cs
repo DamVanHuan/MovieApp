@@ -46,7 +46,7 @@ namespace MovieApp.Applications.Commands.Users
                 };
             }
 
-            throw new BadRequestException("LoginFailed", "Tài khoản hoặc mật khẩu không hợp lệ");
+            throw new BadRequestException("LoginFailed", "Username/Email or password incorrect");
         }
     }
 }

@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using FluentValidation;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MovieApp.Applications.Bahaviors;
 using MovieApp.Data;
 using MovieApp.DTOs.Commons;
+using System.Reflection;
 using System.Text;
 
 namespace MovieApp.Extensions
@@ -23,11 +27,12 @@ namespace MovieApp.Extensions
                     });
             });
         }
+
         public static void ConfigureAuth(this IServiceCollection services, IConfiguration config)
         {
             var jwt = config.GetSection("JWT").Get<JWT>();
             services.AddSingleton(jwt);
-            
+
             services
                 .AddAuthentication(options =>
                 {
@@ -48,6 +53,13 @@ namespace MovieApp.Extensions
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Secret))
                     };
                 });
+        }
+
+        public static void ConfigureFluentValidation(this IServiceCollection services, Assembly assembly)
+        {
+            services.AddValidatorsFromAssembly(assembly);
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assembly));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
         }
     }
 }

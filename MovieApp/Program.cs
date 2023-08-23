@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using MovieApp.Applications.Mappers;
 using MovieApp.DTOs.Commons;
 using MovieApp.DTOs.Exceptions;
 using MovieApp.Extensions;
@@ -11,8 +10,9 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var curentAssembly = Assembly.GetExecutingAssembly();
-// Configure services.
+var currentAssembly = Assembly.GetExecutingAssembly();
+
+// Add services to the container.
 JsonConvert.DefaultSettings = () => new JsonSerializerSettings
 {
     NullValueHandling = NullValueHandling.Ignore,
@@ -22,14 +22,11 @@ JsonConvert.DefaultSettings = () => new JsonSerializerSettings
         NamingStrategy = new CamelCaseNamingStrategy()
     }
 };
-
+builder.Services.AddControllers();
 builder.Services.ConfigureAuth(builder.Configuration);
 builder.Services.AddCustomDbContext(builder.Configuration);
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(curentAssembly));
-builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MapperProfile)));
-
-// Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddAutoMapper(currentAssembly);
+builder.Services.ConfigureFluentValidation(currentAssembly);
 
 
 var app = builder.Build();
@@ -53,7 +50,7 @@ app.UseExceptionHandler(new ExceptionHandlerOptions
         else
         {
             context.Response.StatusCode = Convert.ToInt32(HttpStatusCode.InternalServerError);
-            var error = new ResponseBase("internal_server_error", "Có lỗi xảy ra, vui lòng thử lại");
+            var error = new ResponseBase("InternalServerError", "An error has occur, please try again");
 
             var resp = JsonConvert.SerializeObject(new { code = error.Code, message = error.Message });
             await context.Response.WriteAsync(resp).ConfigureAwait(false);
