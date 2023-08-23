@@ -6,5 +6,6 @@
         public string Title { get; set; }
         public string Image { get; set; }
         public int Like { get; set; }
+        public int Dislike { get; set; }
     }
 }
