@@ -58,8 +58,33 @@ namespace MovieApp.Extensions
         public static void ConfigureFluentValidation(this IServiceCollection services, Assembly assembly)
         {
             services.AddValidatorsFromAssembly(assembly);
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assembly));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+        }
+
+        public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
+        {
+            var corsOrigin = configuration["CorsOrigin"];
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    if (corsOrigin == "*")
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    }
+                    else
+                    {
+                        var origins = corsOrigin.Split(";");
+                        builder.SetIsOriginAllowedToAllowWildcardSubdomains();
+                        builder.WithOrigins(origins).AllowAnyHeader();
+                        builder.WithOrigins(origins).AllowAnyMethod();
+                    }
+                });
+            });
         }
     }
 }

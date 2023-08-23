@@ -23,9 +23,11 @@ JsonConvert.DefaultSettings = () => new JsonSerializerSettings
     }
 };
 builder.Services.AddControllers();
+builder.Services.ConfigureCors(builder.Configuration);
 builder.Services.ConfigureAuth(builder.Configuration);
 builder.Services.AddCustomDbContext(builder.Configuration);
 builder.Services.AddAutoMapper(currentAssembly);
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(currentAssembly));
 builder.Services.ConfigureFluentValidation(currentAssembly);
 
 
@@ -60,9 +62,15 @@ app.UseExceptionHandler(new ExceptionHandlerOptions
 
 app.UseHttpsRedirection();
 
+app.UseCors();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGet("/", async context =>
+{
+    await context.Response.WriteAsJsonAsync(new { State = "Api running ...", Time = DateTime.Now });
+});
 
 app.Run();
