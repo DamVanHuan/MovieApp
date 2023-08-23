@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MovieApp.Applications.Commands;
+using MovieApp.Applications.Commands.Movies;
 using MovieApp.Applications.Queries.Movies;
 using System.Security.Claims;
 

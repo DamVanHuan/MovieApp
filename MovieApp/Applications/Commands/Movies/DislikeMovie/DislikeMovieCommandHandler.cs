@@ -5,7 +5,7 @@ using MovieApp.DTOs.Commons;
 using MovieApp.DTOs.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
-namespace MovieApp.Applications.Commands
+namespace MovieApp.Applications.Commands.Movies
 {
     public class DislikeMovieCommandHandler : IRequestHandler<DislikeMovieCommand, ResponseBase>
     {

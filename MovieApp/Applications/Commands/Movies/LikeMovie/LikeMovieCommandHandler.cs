@@ -5,7 +5,7 @@ using MovieApp.Data.Entities;
 using MovieApp.DTOs.Commons;
 using MovieApp.DTOs.Exceptions;
 
-namespace MovieApp.Applications.Commands
+namespace MovieApp.Applications.Commands.Movies
 {
     public class LikeMovieCommandHandler : IRequestHandler<LikeMovieCommand, ResponseBase>
     {

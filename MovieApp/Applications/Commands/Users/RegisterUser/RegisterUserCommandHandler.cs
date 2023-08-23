@@ -36,7 +36,7 @@ namespace MovieApp.Applications.Commands.Users
         {
             if (await UserExistAsync(request.Username))
             {
-                throw new BadRequestException("UsernameExisted", "Username existed");
+                throw new BadRequestException("UsernameExisted", "Username/Email existed");
             }
 
             var uid = Guid.NewGuid();

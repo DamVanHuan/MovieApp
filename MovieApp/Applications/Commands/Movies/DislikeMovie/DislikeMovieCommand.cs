@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MovieApp.DTOs.Commons;
 
-namespace MovieApp.Applications.Commands
+namespace MovieApp.Applications.Commands.Movies
 {
     public class DislikeMovieCommand : IRequest<ResponseBase>
     {
